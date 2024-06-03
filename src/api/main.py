@@ -1,9 +1,11 @@
 from io import StringIO
+import os
 import subprocess
 import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from dotenv import load_dotenv
 import mysql.connector
 
 app = FastAPI()
@@ -20,15 +22,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Retrieve database credentials from environment variables
+load_dotenv()
+DB_HOST = os.getenv("DB_HOST")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_DATABASE = os.getenv("DB_DATABASE")
+
 mydb = mysql.connector.connect(
-    host="localhost",
-    user="sneha",
-    password="SPMySQL2020."
+    host=DB_HOST,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    database=DB_DATABASE
 )
 
 def add_to_db(code: str, output: str):
     mycursor = mydb.cursor()
-    mycursor.execute("INSERT INTO code_outputs (code, output) VALUES (%s, %s)", (code, output))
+    mycursor.execute("INSERT INTO codeoutputs (code, output) VALUES (%s, %s)", (code, output))
     mydb.commit()
     mycursor.close()
 
@@ -64,6 +74,5 @@ async def submit_code(code: Code):
     install_dependencies()
     output, status = run_code(code.code)
     if status == "success":
-        #TODO: Implement code to save to database
         add_to_db(code.code, output)
     return {"output": output, "status": status}
