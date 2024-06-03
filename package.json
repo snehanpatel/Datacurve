@@ -10,6 +10,13 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@codemirror/lang-python": "^6.1.6",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.19",
+    "@uiw/codemirror-theme-atomone": "^4.22.1",
+    "@uiw/react-codemirror": "^4.22.1",
+    "codemirror": "^6.0.1",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"
